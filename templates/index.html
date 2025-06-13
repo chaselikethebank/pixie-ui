@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pixie Tube Color Control</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      color: #333;
+    }
+    .tube {
+      margin-bottom: 15px;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 200px;
+      background-color: #d0f0c0;
+      color: #333;
+      text-align: center;
+      padding: 14px;
+      border-radius: 4px;
+      position: fixed;
+      z-index: 1000;
+      top: 20px;
+      right: 20px;
+      font-size: 14px;
+      /* Keep opacity and position static */
+      opacity: 1;
+      top: 20px;
+      transition: none;
+    }
+    .toast.show {
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+  <h1>Set Pixie Tube Colors</h1>
+
+  <div id="toast" class="toast"></div>
+
+  <form method="POST" action="/set_color">
+    {% for i in range(1,7) %}
+    <div class="tube">
+      <h3>Tube {{ i }}</h3>
+      Hue:
+      <input type="number" name="h{{i}}" min="0" max="360" value="35" />
+      Saturation:
+      <input type="number" name="s{{i}}" min="0" max="100" value="100" />
+      Brightness:
+      <input type="number" name="v{{i}}" min="0" max="100" value="100" />
+    </div>
+    {% endfor %}
+    <button type="submit">Send Colors</button>
+  </form>
+
+  <div id="flashMessage" style="display:none;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {{ messages[0] }}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <script>
+    const form = document.querySelector('form');
+    const toast = document.getElementById('toast');
+    const flashMessageDiv = document.getElementById('flashMessage');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+    }
+
+    form.addEventListener('submit', () => {
+      showToast('Sending colors…');
+    });
+
+    const flashMessage = flashMessageDiv.textContent.trim();
+    if (flashMessage) {
+      showToast(flashMessage);
+    }
+  </script>
+</body>
+</html>
