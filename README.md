@@ -1,5 +1,7 @@
 # pixie-ui
 
+set colors for the pixie clock w a web ui (python + flask)
+
 ```
 python3 app.py 
 ```
